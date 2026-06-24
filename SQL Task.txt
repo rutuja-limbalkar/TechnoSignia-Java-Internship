@@ -1,0 +1,72 @@
+Q.1 Top 5 highest salary employees
+
+select salary from employees 
+order by salary desc
+limit 5; 
+
+
+Q.2 Department wise employee count
+
+select deptid,count(*) 
+from employees
+group by deptid ; 
+
+
+Q.3 Find Second highest salary
+
+select max(salary)
+from employees 
+where salary<(select max(salary) from employees ); 
+
+
+Q.4  Employees whose salary > department average salary
+
+select id,name,salary
+from employees 
+where salary>(select avg(salary) from employees );
+
+
+Q.5 Perform Inner Join Operation
+
+select *
+from employees Inner join department 
+on employees.deptid=department.deptid;
+
+
+Q.6 Perform Left Join Operation
+
+select *
+from employees Left join department 
+on employees.deptid=department.deptid;
+
+
+Q.7 Perform Group By with Having
+
+select deptid,min(salary) as min_salary
+from employees 
+group by deptid
+having min_salary<30000; 
+
+
+Q.8 Write a Query for Employees hired in last 6 months
+
+select id,name,hire_date
+from employees 
+where hire_date>=date_sub(curdate(),interval  6 month) ; 
+
+
+Q.9 Find the Duplicates records
+
+SELECT name, salary, deptid, COUNT(*) 
+FROM employees
+GROUP BY name, salary, deptid
+HAVING COUNT(*) > 1;
+
+
+Q.10 How to remove the duplicates record
+
+delete e1 from employees e1
+inner join employees e2
+on e1.name=e2.name
+and e1.deptid=e2.deptid
+where e1.id>e2.id; 
