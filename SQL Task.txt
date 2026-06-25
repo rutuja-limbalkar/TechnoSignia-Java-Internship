@@ -1,0 +1,138 @@
+Q.1 Top 5 highest salary employees
+
+select salary from employees 
+order by salary desc
+limit 5; 
+
+
+Q.2 Department wise employee count
+
+select deptid,count(*) 
+from employees
+group by deptid ; 
+
+
+Q.3 Find Second highest salary
+
+select max(salary)
+from employees 
+where salary<(select max(salary) from employees ); 
+
+
+Q.4  Employees whose salary > department average salary
+
+select id,name,salary
+from employees 
+where salary>(select avg(salary) from employees );
+
+
+Q.5 Perform Inner Join Operation
+
+select *
+from employees Inner join department 
+on employees.deptid=department.deptid;
+
+
+Q.6 Perform Left Join Operation
+
+select *
+from employees Left join department 
+on employees.deptid=department.deptid;
+
+
+Q.7 Perform Group By with Having
+
+select deptid,min(salary) as min_salary
+from employees 
+group by deptid
+having min_salary<30000; 
+
+
+Q.8 Write a Query for Employees hired in last 6 months
+
+select id,name,hire_date
+from employees 
+where hire_date>=date_sub(curdate(),interval  6 month) ; 
+
+
+Q.9 Find the Duplicates records
+
+SELECT name, salary, deptid, COUNT(*) 
+FROM employees
+GROUP BY name, salary, deptid
+HAVING COUNT(*) > 1;
+
+
+Q.10 How to remove the duplicates record
+
+delete e1 from employees e1
+inner join employees e2
+on e1.name=e2.name
+and e1.deptid=e2.deptid
+where e1.id>e2.id; 
+
+Q.11 Add some records in the existing table
+
+INSERT INTO employees (name, salary, hire_date, deptid) VALUES
+('Amit Sharma', 85000, '2026-01-10', 2),
+('Neha Patel', 45000, '2025-11-15', 1),
+('Vikram Malhotra', 95000, '2026-03-22', 2),
+('Pooja Rao', 28000, '2026-05-14', 3),
+('Rohan Das', 62000, '2024-09-01', 1),
+('Sneha Reddy', 110000, '2026-02-18', 2);
+
+
+Q.12 Apply window function on the data 
+
+SELECT id,name,salary,deptid,hire_date,DENSE_RANK()OVER(
+PARTITION BY deptid
+ORDER BY hire_date DESC
+)AS hiredate_rank_in_department
+FROM employees;
+
+Q.13 Apply View on the data
+
+CREATE VIEW employee_dept_summery AS 
+SELECT 
+e.id as employeeid,e.name as employeename,e.salary ,d.deptname as employee_dept
+from employees e
+Inner join department d ON e.deptid=d.deptid;
+
+//for to check how it works 
+SELECT * FROM employee_dept_summery;
+
+
+Q.14 Apply Triggers on the data
+
+DELIMITER //
+
+CREATE TRIGGER after_employee_insert
+AFTER INSERT ON employees
+FOR EACH ROW
+BEGIN
+INSERT INTO employee_audit_log (employee_id, action_performed, action_timestamp)
+VALUES (NEW.id, 'NEW EMPLOYEE ADDED', NOW());
+END //
+
+DELIMITER ;
+
+
+// insert new data 
+INSERT INTO employees (name, salary, hire_date, deptid)   
+VALUES ('Rahul Verma', 58000, '2026-06-25', 1);
+
+//shows entered data
+SELECT * FROM empoyee_audit_log;
+
+
+Q.15 Handle Case When in the data
+
+SELECT name,salary,
+case
+when salary>=90000 then 'Tier 1 :senior/ experts'
+when salary >=50000 and salary <90000  then 'Tier 2:Mid-level'
+else 'Associate/Junior'
+End as employees_tier
+from employees
+order by salary DESC;
+
