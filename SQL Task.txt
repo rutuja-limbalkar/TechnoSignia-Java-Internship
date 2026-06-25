@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Q.1 Top 5 highest salary employees
 
 select salary from employees 
@@ -84,12 +85,50 @@ INSERT INTO employees (name, salary, hire_date, deptid) VALUES
 
 Q.12 Apply window function on the data 
 
+// 1.DENSE_RANK()
 SELECT id,name,salary,deptid,hire_date,DENSE_RANK()OVER(
 PARTITION BY deptid
 ORDER BY hire_date DESC
 )AS hiredate_rank_in_department
 FROM employees;
 
+// 2.RANK()
+SELECT ID,NAME,SALARY ,RANK() OVER 
+(PARTITION BY DEPTID ORDER BY SALARY DESC)AS ROW_NUM FROM EMPLOYEES;
+
+//3.ROW_NUMBER()
+SELECT ID,NAME,SALARY ,RANK() OVER 
+(PARTITION BY DEPTID ORDER BY SALARY DESC)AS ROW_NUM FROM EMPLOYEES;
+
+//4.NTILE
+SELECT ID,NAME,SALARY ,NTILE(2) OVER (PARTITION BY deptid ORDER BY salary DESC) AS salary_bucket
+FROM employees;
+
+//5. LED
+SELECT ID,NAME,SALARYLAG(salary, 1) OVER (PARTITION BY deptid ORDER BY salary DESC) AS next_higher_salary,
+FROM employees;
+
+//6.LEAD
+SELECT ID,NAME,SALARY ,LEAD(SALARY) OVER (PARTITION BY deptid ORDER BY salary DESC) AS salary_bucket
+FROM employees;
+
+//7.first_value
+SELECT ID,NAME,SALARY ,first_value(SALARY) OVER (PARTITION BY deptid ORDER BY salary DESC) AS salary_bucket
+FROM employees;
+
+//8.LAST_VALUE
+SELECT ID,NAME,SALARY ,LAST_VALUE(salary) OVER (
+        PARTITION BY deptid ORDER BY salary DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS lowest_dept_salary
+FROM employees;
+
+//9. NTH_VALUE
+SELECT ID,NAME,SALARY ,NTH_VALUE(salary, 2) OVER (
+        PARTITION BY deptid ORDER BY salary DESC
+        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS second_highest_dept_salary
+FROM employees;
 Q.13 Apply View on the data
 
 CREATE VIEW employee_dept_summery AS 
@@ -136,3 +175,4 @@ End as employees_tier
 from employees
 order by salary DESC;
 
+=======
