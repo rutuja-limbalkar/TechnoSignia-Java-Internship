@@ -6,7 +6,7 @@ public class Student {
 	public String name;
 	public String email;
 	public int rollno;
-	public int address;
+	public String address;
 	public String Course;
 	
 	
@@ -34,10 +34,10 @@ public class Student {
 	public void setRollno(int rollno) {
 		this.rollno = rollno;
 	}
-	public int getAddress() {
+	public String getAddress() {
 		return address;
 	}
-	public void setAddress(int address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 	public String getCourse() {
@@ -46,13 +46,13 @@ public class Student {
 	public void setCourse(String course) {
 		Course = course;
 	}
-	public Student(int id, String name, String email, int rollno, int address, String course) {
+	public Student(int id, String name, String email, int rollno, String newAddr, String course) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.rollno = rollno;
-		this.address = address;
+		this.address = newAddr;
 		Course = course;
 	}
 	

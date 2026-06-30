@@ -1,156 +1,77 @@
 package com.sms.deo;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sms.model.Student;
 
 public class StudentDAO {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/sms_db";
-	private static final String USERNAME = "root";
-	private static final String PASSWORD = "rutuja";
-
-	// Reusable connection method
-	private Connection getConnection() {
-		Connection con = null;
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-		} catch (ClassNotFoundException e) {
-			System.out.println("Driver class not found! Check your build path jar: " + e.getMessage());
-		} catch (SQLException e) {
-			System.out.println("Database connection failed: " + e.getMessage());
+	private static final String FILE_NAME = "students.txt";
+	private final Gson gson = new Gson();
+	
+	private void saveAlltoFile(List<Student> list) {
+		try (BufferedWriter w = new BufferedWriter(new FileWriter(FILE_NAME))) {
+			w.write(gson.toJson(list));
+		} catch (IOException e) {
+			System.out.println("Error writing to file: " + e.getMessage());
 		}
-		return con;
 	}
 	
-	// Helper method to safely validate connection states
-	private boolean isConnectionInvalid(Connection conn) {
-		if (conn == null) {
-			System.out.println("Cannot proceed: database connection is offline.");
-			return true;
-		}
-		return false;
-	}
-
-	// 1. ADD STUDENT
 	public boolean addStudent(Student s) {
-		String query = "INSERT INTO students(id, name, email, rollno, address, course) VALUES(?,?,?,?,?,?)";
-		Connection conn = getConnection();
-		
-		if (isConnectionInvalid(conn)) return false;
-
-		try (PreparedStatement p = conn.prepareStatement(query)) {
-			p.setInt(1, s.getId());
-			p.setString(2, s.getName());
-			p.setString(3, s.getEmail());
-			p.setInt(4, s.getRollno());
-			p.setInt(5, s.getAddress());
-			p.setString(6, s.getCourse());
-			
-			return p.executeUpdate() > 0;
-		} catch (SQLException e) {
-			System.out.println("Database execution error: " + e.getMessage());
-			return false;
-		}
+		List<Student> students = getAllStudents();
+		students.add(s);
+		saveAlltoFile(students);
+		return true;
 	}
 
-	// 2. VIEW ALL STUDENTS
 	public List<Student> getAllStudents() {
-		List<Student> li = new ArrayList<>();
-		String query = "SELECT * FROM students";
-		Connection conn = getConnection();
-
-		if (isConnectionInvalid(conn)) return li;
-
-		try (Statement st = conn.createStatement();
-			 ResultSet rs = st.executeQuery(query)) {
-
-			while (rs.next()) {
-				Student s = new Student(
-						rs.getInt("id"),
-						rs.getString("name"),
-						rs.getString("email"),
-						rs.getInt("rollno"),
-						rs.getInt("address"),
-						rs.getString("course")
-				);
-				li.add(s);
-			}
-		} catch (SQLException e) {
-			System.out.println("Database fetch error: " + e.getMessage());
+		File file = new File(FILE_NAME);
+		if (!file.exists()) return new ArrayList<>();
+		
+		try (BufferedReader r = new BufferedReader(new FileReader(file))) {
+			java.lang.reflect.Type listType = new TypeToken<ArrayList<Student>>(){}.getType();
+			List<Student> list = gson.fromJson(r, listType);
+			return list != null ? list : new ArrayList<>();
+		} catch (IOException e) {
+			System.out.println("Error reading file: " + e.getMessage());
+			return new ArrayList<>();
 		}
-		return li;
 	}
 
-	// 3. SEARCH STUDENT BY ID
 	public Student getStudentById(int id) {
-		String query = "SELECT * FROM students WHERE id = ?";
-		Connection conn = getConnection();
-
-		if (isConnectionInvalid(conn)) return null;
-
-		try (PreparedStatement stmt = conn.prepareStatement(query)) {
-			stmt.setInt(1, id);
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-					return new Student(
-							rs.getInt("id"),
-							rs.getString("name"),
-							rs.getString("email"),
-							rs.getInt("rollno"),
-							rs.getInt("address"),
-							rs.getString("course")
-					);
-				}
-			}
-		} catch (SQLException e) {
-			System.out.println("Database search error: " + e.getMessage());
+		for (Student s : getAllStudents()) {
+			if (s.getId() == id) return s;
 		}
 		return null;
 	}
 
-	// 4. UPDATE STUDENT
-	public boolean updateStudent(Student student) {
-		String query = "UPDATE students SET name = ?, email = ?, rollno = ?, address = ?, course = ? WHERE id = ?";
-		Connection conn = getConnection();
-
-		if (isConnectionInvalid(conn)) return false;
-
-		try (PreparedStatement st = conn.prepareStatement(query)) {
-			st.setString(1, student.getName());
-			st.setString(2, student.getEmail());
-			st.setInt(3, student.getRollno());
-			st.setInt(4, student.getAddress());
-			st.setString(5, student.getCourse());
-			st.setInt(6, student.getId());
-            
-			return st.executeUpdate() > 0;
-		} catch (SQLException e) {
-			System.out.println("Database update error: " + e.getMessage());
-			return false;
+	public boolean updateStudent(Student updateStudent) {
+		List<Student> students = getAllStudents();
+		for (int i = 0; i < students.size(); i++) {
+			if (students.get(i).getId() == updateStudent.getId()) {
+				students.set(i, updateStudent);
+				saveAlltoFile(students);
+				return true;
+			}
 		}
+		return false;
 	}
 
-	// 5. DELETE STUDENT
 	public boolean deleteStudent(int id) {
-		String query = "DELETE FROM students WHERE id = ?";
-		Connection conn = getConnection();
-
-		if (isConnectionInvalid(conn)) return false;
-
-		try (PreparedStatement st = conn.prepareStatement(query)) {
-			st.setInt(1, id);
-			return st.executeUpdate() > 0;
-		} catch (SQLException e) {
-			System.out.println("Database delete error: " + e.getMessage());
-			return false;
+		List<Student> students = getAllStudents();
+		boolean removed = students.removeIf(s -> s.getId() == id);
+		if (removed) {
+			saveAlltoFile(students);
+			return true;
 		}
+		return false;
 	}
 }
