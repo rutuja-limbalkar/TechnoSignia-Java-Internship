@@ -1,0 +1,1 @@
+[{"id":1,"name":"rutuja","email":"rutuja@gmail.com","rollno":111,"address":"Enter Address: ","Course":"java"},{"id":2,"name":"abc","email":"abc@gmail.com","rollno":122,"address":"jalgaon","Course":"python"}]

@@ -9,7 +9,6 @@ public class Main {
     
     private static final Scanner sc = new Scanner(System.in);
 
-    // Reusable helper method to remove repeated try-catch blocks for numbers
     private static int readInt(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -39,13 +38,17 @@ public class Main {
                     System.out.print("Enter Email: ");
                     String email = sc.nextLine();
                     int roll = readInt("Enter Roll No: ");
-                    int address = readInt("Enter Address: ");
+                    
+                    // FIX: Prompt user and read address directly as a String line
+                    System.out.print("Enter Address: ");
+                    String address = sc.nextLine();
+                    
                     System.out.print("Enter Course: ");
                     String course = sc.nextLine();
 
                     Student s = new Student(id, name, email, roll, address, course);
                     if (dao.addStudent(s)) {
-                        System.out.println("Stored to database successfully!");
+                        System.out.println("Data Saved successfully!");
                     }
                     break;
                     
@@ -55,7 +58,7 @@ public class Main {
                         System.out.println("Table is empty.");
                     } else {
                         for (Student student : stu) {
-                            System.out.println("Id " + student.getId() + " | Name: " + student.getName() + " | Course: " + student.getCourse() + " | Email " + student.getEmail());
+                            System.out.println("Id " + student.getId() + " | Name: " + student.getName() + " | Course: " + student.getCourse() + " | Address: " + student.getAddress() + " | Email " + student.getEmail());
                         }
                     }
                     break;
@@ -64,7 +67,7 @@ public class Main {
                     int searchId = readInt("Enter Student Id: ");
                     Student found = dao.getStudentById(searchId);
                     if (found != null) {
-                        System.out.println("Found -> Name: " + found.getName() + ", Course: " + found.getCourse() + ", Email: " + found.getEmail());
+                        System.out.println("Found -> Name: " + found.getName() + ", Course: " + found.getCourse() + ", Address: " + found.getAddress() + ", Email: " + found.getEmail());
                     } else {
                         System.out.println("No matching ID found inside database.");
                     }
@@ -81,7 +84,7 @@ public class Main {
                         System.out.print("New Name (" + existing.getName() + "): ");
                         String newName = sc.nextLine();
                         if (newName.trim().isEmpty()) {
-                            newName = existing.getName(); // Keep old value if empty
+                            newName = existing.getName();
                         }
 
                         // 2. Update Email
@@ -96,11 +99,13 @@ public class Main {
                         String rollInput = sc.nextLine();
                         int newRoll = rollInput.trim().isEmpty() ? existing.getRollno() : Integer.parseInt(rollInput);
 
-                        // 4. Update Address (What you want to change)
-                        System.out.print("New Address Code (" + existing.getAddress() + "): ");
-                        String addrInput = sc.nextLine();
-                        int newAddr = addrInput.trim().isEmpty() ? existing.getAddress() : Integer.parseInt(addrInput);
-
+                        // 4. Update Address (Handles Text & Spaces Strings perfectly now)
+                        System.out.print("New Address (" + existing.getAddress() + "): ");
+                        String newAddr = sc.nextLine();
+                        if (newAddr.trim().isEmpty()) { 
+                            newAddr = existing.getAddress();
+                        }
+                        
                         // 5. Update Course
                         System.out.print("New Course (" + existing.getCourse() + "): ");
                         String newCourse = sc.nextLine();
@@ -108,7 +113,6 @@ public class Main {
                             newCourse = existing.getCourse();
                         }   
                         
-                        // Save the mixed object back to your existing StudentDAO update method
                         Student updated = new Student(updateId, newName, newEmail, newRoll, newAddr, newCourse);
                         if (dao.updateStudent(updated)) {
                             System.out.println("Data updated successfully!");
