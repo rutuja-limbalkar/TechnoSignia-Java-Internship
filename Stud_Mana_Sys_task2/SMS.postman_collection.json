@@ -1,0 +1,382 @@
+{
+  "info": {
+    "_postman_id": "d558e1a3-3f25-4615-a5fc-eb7131f93216",
+    "name": "SMS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50450352",
+    "_collection_link": "https://go.postman.co/collection/50450352-d558e1a3-3f25-4615-a5fc-eb7131f93216?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "post-Signup",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Ananya Iyer\",\r\n    \"email\": \"ananya@example.com\",\r\n    \"rollno\": 111,\r\n    \"course\": \"Java Full Stack\",\r\n    \"address\": \"Chennai\",\r\n    \"password\": \"mySecurePassword123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/signup",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "post-login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"ananya@example.com\",\r\n    \"password\": \"mySecurePassword123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "post-Add Student",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Aarav Sharma\",\r\n    \"email\": \"aarav@example.com\",\r\n    \"rollno\": 101,\r\n    \"course\": \"Java Full Stack\",\r\n    \"address\": \"Pune\",\r\n    \"password\": \"aaravPassword123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/students",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get -All Records with Pagination & Sorting",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students?pageNo=0&pageSize=5&sortBy=id&sortDir=asc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students"
+          ],
+          "query": [
+            {
+              "key": "pageNo",
+              "value": "0"
+            },
+            {
+              "key": "pageSize",
+              "value": "5"
+            },
+            {
+              "key": "sortBy",
+              "value": "id"
+            },
+            {
+              "key": "sortDir",
+              "value": "asc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get-Record By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "put-Update Record",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Aarav Sharma Updated\",\r\n    \"email\": \"aarav.new@example.com\",\r\n    \"rollno\": 101,\r\n    \"course\": \"Spring Boot Expert\",\r\n    \"address\": \"Mumbai\",\r\n    \"password\": \"aaravPassword123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/students/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "delete-deleteStudent",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get-Search by Name (Sorted Ascending)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students/search/name?name=Ananya Iyer&sortBy=name&sortDir=asc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "search",
+            "name"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "Ananya Iyer"
+            },
+            {
+              "key": "sortBy",
+              "value": "name"
+            },
+            {
+              "key": "sortDir",
+              "value": "asc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get-Search by Email",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students/search/email?email=ananya@example.com",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "search",
+            "email"
+          ],
+          "query": [
+            {
+              "key": "email",
+              "value": "ananya@example.com"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search by Department / Course (Sorted by Roll No Descending)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students/search/course?course=Java Full Stack&sortBy=rollno&sortDir=desc",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "search",
+            "course"
+          ],
+          "query": [
+            {
+              "key": "course",
+              "value": "Java Full Stack"
+            },
+            {
+              "key": "sortBy",
+              "value": "rollno"
+            },
+            {
+              "key": "sortDir",
+              "value": "desc"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search by City / Address",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students/search/city?city=Chennai",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "search",
+            "city"
+          ],
+          "query": [
+            {
+              "key": "city",
+              "value": "Chennai"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search by Roll Number",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/students/search/rollno?rollno=111",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students",
+            "search",
+            "rollno"
+          ],
+          "query": [
+            {
+              "key": "rollno",
+              "value": "111"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "post-Test Validation Failure",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"invalid-email-format\",\r\n    \"rollno\": 0,\r\n    \"course\": \"\",\r\n    \"address\": \"\",\r\n    \"password\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/students",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "students"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
