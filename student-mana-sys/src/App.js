@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import Login from './Component/Login';
+import Signup from './Component/SignUp';
+import Dashboard from './Component/Dashboard';
+import StudentList from './Component/StudentList'
+import StudentForm from './Component/StudentForm'
+import Sidebar from './Component/Sidebar'
+import Settings from './Component/Settings'
 import './App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-root">
+      <Routes>
+        {/* Default route redirects straight to login */}
+        <Route path="/" element={<Navigate to="/login" />} />
+        
+        {/* Define paths for each component page */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/students-list" element={<StudentList/>}/>
+        <Route path="/student-form" element={<StudentForm/>}/>
+        <Route path="/sidebar" element={<Sidebar/>}/>
+        <Route path="/settings" element={<Settings/>}/>
+      </Routes>
     </div>
   );
 }
